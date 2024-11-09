@@ -12,14 +12,15 @@ TagManager:
   - LeftController
   - RightController
   - XRInteractionManager
+  - GhostTarget
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - GhostTarget
   - Water
   - UI
-  - 
+  - Interactable
   - 
   - 
   - 
