@@ -9,6 +9,9 @@ TagManager:
   - Destroyer
   - MiniWorldCamera
   - Water
+  - LeftController
+  - RightController
+  - XRInteractionManager
   layers:
   - Default
   - TransparentFX
