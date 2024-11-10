@@ -6,29 +6,28 @@ public class GhostEnemy : MonoBehaviour
 {
     public float moveSpeed = 2f;
     public float patrolRadius = 20f;
-    public float detectionRange = 15f;
-    public float reachDistance = 1f;  
-    public AudioClip beforeHuntSound;         
-    public AudioSource audioSource;    
-    public AudioClip huntSound;         
+    public float reachDistance = 1f;
+    public AudioClip beforeHuntSound;
+    public AudioSource audioSource;
+    public AudioClip huntSound;
 
-
-    [SerializeField] private SkinnedMeshRenderer[] ghostRenderers; 
+    [SerializeField] private SkinnedMeshRenderer[] ghostRenderers;
     private NavMeshAgent navMeshAgent;
     private Transform player;
 
     private bool isHunting = false;
-    private float huntInterval = 20f;   
-    private float huntChance = 0.25f;   
+    private float huntInterval = 20f;
+    private float huntChance = 0.25f;
     private Coroutine huntCoroutine;
 
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = moveSpeed;
-        player = GameObject.FindGameObjectWithTag("GhostTarget").transform;
 
-        SetGhostVisibility(false); 
+        UpdatePlayerReference();
+
+        SetGhostVisibility(false);
         SetRandomPatrolPoint();
         StartCoroutine(CheckHuntChance());
     }
@@ -37,8 +36,15 @@ public class GhostEnemy : MonoBehaviour
     {
         if (isHunting)
         {
-            HuntPlayer();
-            CheckIfPlayerReached();
+            if (player != null && IsPlayerReachable())
+            {
+                HuntPlayer();
+                CheckIfPlayerReached();
+            }
+            else
+            {
+                Patrol(); 
+            }
         }
         else
         {
@@ -68,7 +74,7 @@ public class GhostEnemy : MonoBehaviour
             audioSource.PlayOneShot(beforeHuntSound);
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         StartHunting();
     }
@@ -77,14 +83,25 @@ public class GhostEnemy : MonoBehaviour
     {
         isHunting = true;
         navMeshAgent.isStopped = false;
-        navMeshAgent.SetDestination(player.position);
-        if (audioSource != null && beforeHuntSound != null)
+
+        UpdatePlayerReference();
+
+        if (player != null && IsPlayerReachable())
+        {
+            navMeshAgent.SetDestination(player.position);
+        }
+        else
+        {
+            SetRandomPatrolPoint(); 
+        }
+
+        if (audioSource != null && huntSound != null)
         {
             audioSource.PlayOneShot(huntSound);
         }
+
         float huntDuration = Random.Range(20f, 40f);
         huntCoroutine = StartCoroutine(HuntDurationTimer(huntDuration));
-
         StartCoroutine(FlickerEffect());
     }
 
@@ -103,12 +120,13 @@ public class GhostEnemy : MonoBehaviour
     {
         isHunting = false;
         audioSource.Stop();
+
         if (huntCoroutine != null)
         {
             StopCoroutine(huntCoroutine);
         }
 
-        SetGhostVisibility(false); 
+        SetGhostVisibility(false);
         SetRandomPatrolPoint();
     }
 
@@ -168,10 +186,27 @@ public class GhostEnemy : MonoBehaviour
     {
         while (isHunting)
         {
-            SetGhostVisibility(!ghostRenderers[0].enabled); 
+            SetGhostVisibility(!ghostRenderers[0].enabled);
             yield return new WaitForSeconds(0.2f);
         }
 
         SetGhostVisibility(false);
+    }
+
+    bool IsPlayerReachable()
+    {
+        if (player == null) return false;
+
+        NavMeshPath path = new NavMeshPath();
+        if (navMeshAgent.CalculatePath(player.position, path))
+        {
+            return path.status == NavMeshPathStatus.PathComplete;
+        }
+        return false;
+    }
+
+    void UpdatePlayerReference()
+    {
+        player = GameObject.FindGameObjectWithTag("GhostTarget")?.transform;
     }
 }
