@@ -16,9 +16,10 @@ public class GhostEnemy : MonoBehaviour
     private Transform player;
 
     private bool isHunting = false;
-    private float huntInterval = 20f;
-    private float huntChance = 0.25f;
+    public float huntInterval = 20f;
+    public float huntChance = 0.25f;
     private Coroutine huntCoroutine;
+    public GameObject deathEffect;
 
     void Start()
     {
@@ -74,7 +75,7 @@ public class GhostEnemy : MonoBehaviour
             audioSource.PlayOneShot(beforeHuntSound);
         }
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7f);
 
         StartHunting();
     }
@@ -135,6 +136,8 @@ public class GhostEnemy : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= reachDistance)
         {
             StopHunting();
+            Debug.Log("Ghost: YUM YUM!");
+            deathEffect.SetActive(true);
         }
     }
 
