@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class GhostEnemy : MonoBehaviour
 {
@@ -10,19 +11,28 @@ public class GhostEnemy : MonoBehaviour
     public AudioClip beforeHuntSound;
     public AudioSource audioSource;
     public AudioClip huntSound;
+    public AudioClip idleSound; 
+    public AudioClip woodCreakSound; 
 
     [SerializeField] private SkinnedMeshRenderer[] ghostRenderers;
     private NavMeshAgent navMeshAgent;
     private Transform player;
 
+    private Animator animator;
+
     private bool isHunting = false;
+    private bool isAppearancePlaying = false; 
+    private bool isRandomSoundPlaying = false; 
     public float huntInterval = 20f;
     public float huntChance = 0.25f;
+    public float eventChance = 0.15f;
+    public float eventInterval = 20f;
     private Coroutine huntCoroutine;
     public GameObject deathEffect;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = moveSpeed;
 
@@ -31,6 +41,8 @@ public class GhostEnemy : MonoBehaviour
         SetGhostVisibility(false);
         SetRandomPatrolPoint();
         StartCoroutine(CheckHuntChance());
+        StartCoroutine(CheckIdleAppearanceChance()); 
+        StartCoroutine(CheckRandomSoundChance()); 
     }
 
     void Update()
@@ -44,10 +56,10 @@ public class GhostEnemy : MonoBehaviour
             }
             else
             {
-                Patrol(); 
+                Patrol();
             }
         }
-        else
+        else if (!isAppearancePlaying)
         {
             Patrol();
         }
@@ -59,21 +71,71 @@ public class GhostEnemy : MonoBehaviour
         {
             yield return new WaitForSeconds(huntInterval);
 
-            if (!isHunting && Random.value < huntChance)
+            if (!isHunting && !isAppearancePlaying && !isRandomSoundPlaying && Random.value < huntChance)
             {
                 StartCoroutine(PrepareForHunt());
             }
         }
     }
 
+    IEnumerator CheckIdleAppearanceChance()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(eventInterval);
+
+            if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < eventChance)
+            {
+                StartCoroutine(Appearance());
+            }
+        }
+    }
+
+    IEnumerator CheckRandomSoundChance()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(eventInterval);
+
+            if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < eventChance)
+            {
+                RandomSound();
+            }
+        }
+    }
+
+    IEnumerator Appearance()
+    {
+        isAppearancePlaying = true;
+        SetGhostVisibility(true);
+        navMeshAgent.isStopped = true;
+        audioSource.PlayOneShot(idleSound);
+        animator.SetTrigger("isIdle");
+        float idleDuration = Random.Range(3f, 10f);
+
+        yield return new WaitForSeconds(idleDuration);
+
+        SetGhostVisibility(false);
+        animator.SetTrigger("isWalk");
+        navMeshAgent.isStopped = false;
+        audioSource.Stop();
+        isAppearancePlaying = false;
+    }
+
+
+    private void RandomSound()
+    {
+        isRandomSoundPlaying = true; 
+
+        audioSource.PlayOneShot(woodCreakSound);
+
+        isRandomSoundPlaying = false; 
+    }
+
     IEnumerator PrepareForHunt()
     {
         navMeshAgent.isStopped = true;
-
-        if (audioSource != null && beforeHuntSound != null)
-        {
-            audioSource.PlayOneShot(beforeHuntSound);
-        }
+        audioSource.PlayOneShot(beforeHuntSound);
 
         yield return new WaitForSeconds(7f);
 
@@ -93,7 +155,7 @@ public class GhostEnemy : MonoBehaviour
         }
         else
         {
-            SetRandomPatrolPoint(); 
+            SetRandomPatrolPoint();
         }
 
         if (audioSource != null && huntSound != null)
