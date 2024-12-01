@@ -81,6 +81,12 @@ public class Ghost : MonoBehaviour
     {
         while (true)
         {
+            if (isHunting || isAppearancePlaying || isRandomSoundPlaying)
+            {
+                yield return new WaitForSeconds(3f); 
+                continue;
+            }
+
             yield return new WaitForSeconds(huntInterval);
 
             if (!isHunting && !isAppearancePlaying && !isRandomSoundPlaying && Random.value < huntChance)
@@ -90,10 +96,18 @@ public class Ghost : MonoBehaviour
         }
     }
 
+
+
     IEnumerator CheckIdleAppearanceChance()
     {
         while (true)
         {
+            if (isHunting || isAppearancePlaying || isRandomSoundPlaying)
+            {
+                yield return new WaitForSeconds(3f);
+                continue;
+            }
+
             yield return new WaitForSeconds(eventInterval);
 
             if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < eventChance)
@@ -107,6 +121,12 @@ public class Ghost : MonoBehaviour
     {
         while (true)
         {
+            if (isHunting || isAppearancePlaying || isRandomSoundPlaying)
+            {
+                yield return new WaitForSeconds(3f);
+                continue;
+            }
+
             yield return new WaitForSeconds(soundInterval);
 
             if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < soundChance)
