@@ -4,7 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Bone : MonoBehaviour
 {
-    private bool isGrabbed = false;
+    private static int grabbedBoneCount = 0; 
     public GameObject highlight;
     private bool hasBeenGrabbed;
 
@@ -26,12 +26,18 @@ public class Bone : MonoBehaviour
         }
 
         hasBeenGrabbed = true;
+        grabbedBoneCount++;
+
         highlight.SetActive(true);
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        highlight.SetActive(false);
-    }
+        grabbedBoneCount--;
 
+        if (grabbedBoneCount <= 0)
+        {
+            highlight.SetActive(false);
+        }
+    }
 }

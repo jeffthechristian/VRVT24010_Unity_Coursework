@@ -13,8 +13,8 @@ public class Ghost : MonoBehaviour
     public AudioClip beforeHuntSound;
     public AudioSource audioSource;
     public AudioClip huntSound;
-    public AudioClip idleSound; 
-    public AudioClip woodCreakSound; 
+    public AudioClip idleSound;
+    public AudioClip[] randomSounds;
 
     [SerializeField] private SkinnedMeshRenderer[] ghostRenderers;
     private NavMeshAgent navMeshAgent;
@@ -29,6 +29,8 @@ public class Ghost : MonoBehaviour
     public float huntChance = 0.25f;
     public float eventChance = 0.15f;
     public float eventInterval = 20f;
+    public float soundChance = 0.15f;
+    public float soundInterval = 20f;
     private Coroutine huntCoroutine;
     public GameObject deathEffect;
 
@@ -105,9 +107,9 @@ public class Ghost : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(eventInterval);
+            yield return new WaitForSeconds(soundInterval);
 
-            if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < eventChance)
+            if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < soundChance)
             {
                 RandomSound();
             }
@@ -135,11 +137,14 @@ public class Ghost : MonoBehaviour
 
     private void RandomSound()
     {
-        isRandomSoundPlaying = true; 
+        isRandomSoundPlaying = true;
 
-        audioSource.PlayOneShot(woodCreakSound);
+        int randomIndex = Random.Range(0, randomSounds.Length);
+        AudioClip selectedClip = randomSounds[randomIndex];
 
-        isRandomSoundPlaying = false; 
+        audioSource.PlayOneShot(selectedClip);
+
+        isRandomSoundPlaying = false;
     }
 
     IEnumerator PrepareForHunt()
