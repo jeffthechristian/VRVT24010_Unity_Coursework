@@ -81,7 +81,7 @@ public class Ghost : MonoBehaviour
 
     private bool isAnyCoroutineRunning()
     {
-        return isHunting || isAppearancePlaying || isRandomSoundPlaying;
+        return isHunting || isAppearancePlaying;
     }
 
     IEnumerator CheckHuntChance()
@@ -176,17 +176,42 @@ public class Ghost : MonoBehaviour
 
     IEnumerator PrepareForHunt()
     {
+        isHunting = true;
         navMeshAgent.isStopped = true;
         audioSource.PlayOneShot(beforeHuntSound);
+
+        HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
+        if (hingeJoint != null)
+        {
+            JointSpring jointSpring = hingeJoint.spring;
+            jointSpring.targetPosition = 0; 
+            hingeJoint.spring = jointSpring;
+            hingeJoint.useSpring = true; 
+            hingeJoint.useLimits = false; 
+        }
+
+        XRGrabInteractable grabInteractable = outsideDoor.GetComponent<XRGrabInteractable>();
+        if (grabInteractable != null)
+        {
+            grabInteractable.enabled = false; 
+        }
+
+        Rigidbody rb = outsideDoor.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true; 
+        }
+
+        outsideDoor.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         yield return new WaitForSeconds(7f);
 
         StartHunting();
     }
 
+
     void StartHunting()
     {
-        isHunting = true;
         navMeshAgent.isStopped = false;
 
         UpdatePlayerReference();
@@ -218,26 +243,9 @@ public class Ghost : MonoBehaviour
 
     void HuntPlayer()
     {
-        HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
-        if (hingeJoint != null)
-        {
-            JointSpring jointSpring = hingeJoint.spring;
-            jointSpring.targetPosition = 0; 
-            hingeJoint.spring = jointSpring;
-            hingeJoint.useSpring = true;
-            hingeJoint.useLimits = false; 
-        }
-
-        XRGrabInteractable grabInteractable = outsideDoor.GetComponent<XRGrabInteractable>();
-        if (grabInteractable != null)
-        {
-            grabInteractable.enabled = false; 
-        }
-
-        outsideDoor.transform.rotation = Quaternion.Euler(0, 0, 0);
-
         navMeshAgent.SetDestination(player.position);
     }
+
 
     void StopHunting()
     {
@@ -252,7 +260,13 @@ public class Ghost : MonoBehaviour
         XRGrabInteractable grabInteractable = outsideDoor.GetComponent<XRGrabInteractable>();
         if (grabInteractable != null)
         {
-            grabInteractable.enabled = true; 
+            grabInteractable.enabled = true;
+        }
+
+        Rigidbody rb = outsideDoor.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
         }
 
         HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
@@ -265,6 +279,7 @@ public class Ghost : MonoBehaviour
         SetGhostVisibility(false);
         SetRandomPatrolPoint();
     }
+
 
     void CheckIfPlayerReached()
     {
