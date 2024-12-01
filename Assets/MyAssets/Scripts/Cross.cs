@@ -9,9 +9,15 @@ public class Cross : MonoBehaviour
     public GameObject smallBone2Object;
     public GameObject mediumBoneObject;
 
+    public GameObject cabinetDoor1;
+    public GameObject cabinetDoor2;
+    public GameObject candle;
+
+    public GameObject fire;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Bones")) 
+        if (other.CompareTag("Bones"))
         {
             string itemName = other.gameObject.name;
 
@@ -41,6 +47,18 @@ public class Cross : MonoBehaviour
             }
 
             Destroy(other.gameObject);
+
+            if (AreAllBonesEnabled())
+            {
+                if (cabinetDoor1 != null) cabinetDoor1.SetActive(false);
+                if (cabinetDoor2 != null) cabinetDoor2.SetActive(true);
+                if (candle != null) candle.SetActive(true);
+            }
+        }
+
+        if (other.CompareTag("Fire"))
+        {
+            fire.SetActive(true);
         }
     }
 
@@ -54,5 +72,15 @@ public class Cross : MonoBehaviour
         {
             Debug.LogError("Object is not assigned in the script.");
         }
+    }
+
+    private bool AreAllBonesEnabled()
+    {
+        return skullObject.activeInHierarchy &&
+               backboneObject.activeInHierarchy &&
+               bigBoneObject.activeInHierarchy &&
+               smallBone1Object.activeInHierarchy &&
+               smallBone2Object.activeInHierarchy &&
+               mediumBoneObject.activeInHierarchy;
     }
 }

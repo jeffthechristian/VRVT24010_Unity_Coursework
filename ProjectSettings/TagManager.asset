@@ -14,6 +14,8 @@ TagManager:
   - XRInteractionManager
   - GhostTarget
   - Bones
+  - Candle
+  - Fire
   layers:
   - Default
   - TransparentFX
