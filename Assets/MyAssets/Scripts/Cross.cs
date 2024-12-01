@@ -17,22 +17,22 @@ public class Cross : MonoBehaviour
 
             switch (itemName)
             {
-                case "Skull":
+                case "Skull(Clone)":
                     EnableObject(skullObject);
                     break;
-                case "Backbone":
+                case "Backbone(Clone)":
                     EnableObject(backboneObject);
                     break;
-                case "BigBone":
+                case "BigBone(Clone)":
                     EnableObject(bigBoneObject);
                     break;
-                case "SmallBone1":
+                case "SmallBone1(Clone)":
                     EnableObject(smallBone1Object);
                     break;
-                case "SmallBone2":
+                case "SmallBone2(Clone)":
                     EnableObject(smallBone2Object);
                     break;
-                case "MediumBone":
+                case "MediumBone(Clone)":
                     EnableObject(mediumBoneObject);
                     break;
                 default:

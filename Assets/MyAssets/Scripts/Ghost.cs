@@ -54,7 +54,7 @@ public class Ghost : MonoBehaviour
         {
             currentGhostAnger = ghostAnger;
 
-            huntChance += 0.75f;
+            huntChance += 0.08f;
         }
 
         if (isHunting)

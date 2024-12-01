@@ -26,21 +26,12 @@ public class Bone : MonoBehaviour
         }
 
         hasBeenGrabbed = true;
-        isGrabbed = true;
         highlight.SetActive(true);
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        isGrabbed = false;
         highlight.SetActive(false);
     }
 
-    void Update()
-    {
-        if (isGrabbed)
-        {
-            Debug.Log("The object is currently grabbed.");
-        }
-    }
 }
