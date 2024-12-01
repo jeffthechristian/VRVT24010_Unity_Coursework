@@ -79,32 +79,35 @@ public class Ghost : MonoBehaviour
         }
     }
 
+    private bool isAnyCoroutineRunning()
+    {
+        return isHunting || isAppearancePlaying || isRandomSoundPlaying;
+    }
+
     IEnumerator CheckHuntChance()
     {
         while (true)
         {
-            if (isHunting || isAppearancePlaying || isRandomSoundPlaying)
+            if (isAnyCoroutineRunning())
             {
-                yield return new WaitForSeconds(3f); 
+                yield return new WaitForSeconds(3f);
                 continue;
             }
 
             yield return new WaitForSeconds(huntInterval);
 
-            if (!isHunting && !isAppearancePlaying && !isRandomSoundPlaying && Random.value < huntChance)
+            if (!isAppearancePlaying && !isHunting && Random.value < huntChance)
             {
                 StartCoroutine(PrepareForHunt());
             }
         }
     }
 
-
-
     IEnumerator CheckIdleAppearanceChance()
     {
         while (true)
         {
-            if (isHunting || isAppearancePlaying || isRandomSoundPlaying)
+            if (isAnyCoroutineRunning())
             {
                 yield return new WaitForSeconds(3f);
                 continue;
@@ -112,7 +115,7 @@ public class Ghost : MonoBehaviour
 
             yield return new WaitForSeconds(eventInterval);
 
-            if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < eventChance)
+            if (!isAppearancePlaying && !isHunting && Random.value < eventChance)
             {
                 StartCoroutine(Appearance());
             }
@@ -123,7 +126,7 @@ public class Ghost : MonoBehaviour
     {
         while (true)
         {
-            if (isHunting || isAppearancePlaying || isRandomSoundPlaying)
+            if (isAnyCoroutineRunning())
             {
                 yield return new WaitForSeconds(3f);
                 continue;
@@ -131,7 +134,7 @@ public class Ghost : MonoBehaviour
 
             yield return new WaitForSeconds(soundInterval);
 
-            if (!isAppearancePlaying && !isHunting && !isRandomSoundPlaying && Random.value < soundChance)
+            if (Random.value < soundChance)
             {
                 RandomSound();
             }
@@ -140,6 +143,8 @@ public class Ghost : MonoBehaviour
 
     IEnumerator Appearance()
     {
+        if (isHunting) yield break;
+
         isAppearancePlaying = true;
         SetGhostVisibility(true);
         navMeshAgent.isStopped = true;
