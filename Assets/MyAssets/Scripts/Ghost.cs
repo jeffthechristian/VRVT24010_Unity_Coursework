@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.Audio;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Ghost : MonoBehaviour
 {
@@ -16,8 +17,6 @@ public class Ghost : MonoBehaviour
     public AudioClip idleSound;
     public AudioClip[] randomSounds;
     public GameObject outsideDoor;
-    public GameObject outsideDoorHandle;
-
 
     [SerializeField] private SkinnedMeshRenderer[] ghostRenderers;
     private NavMeshAgent navMeshAgent;
@@ -214,8 +213,24 @@ public class Ghost : MonoBehaviour
 
     void HuntPlayer()
     {
-        outsideDoorHandle.SetActive(false);
-        outsideDoor.transform.rotation = Quaternion.Euler(0, 0, 0); 
+        HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
+        if (hingeJoint != null)
+        {
+            JointSpring jointSpring = hingeJoint.spring;
+            jointSpring.targetPosition = 0; 
+            hingeJoint.spring = jointSpring;
+            hingeJoint.useSpring = true;
+            hingeJoint.useLimits = false; 
+        }
+
+        XRGrabInteractable grabInteractable = outsideDoor.GetComponent<XRGrabInteractable>();
+        if (grabInteractable != null)
+        {
+            grabInteractable.enabled = false; 
+        }
+
+        outsideDoor.transform.rotation = Quaternion.Euler(0, 0, 0);
+
         navMeshAgent.SetDestination(player.position);
     }
 
@@ -229,7 +244,19 @@ public class Ghost : MonoBehaviour
             StopCoroutine(huntCoroutine);
         }
 
-        outsideDoorHandle.SetActive(true);
+        XRGrabInteractable grabInteractable = outsideDoor.GetComponent<XRGrabInteractable>();
+        if (grabInteractable != null)
+        {
+            grabInteractable.enabled = true; 
+        }
+
+        HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
+        if (hingeJoint != null)
+        {
+            hingeJoint.useSpring = false; 
+            hingeJoint.useLimits = true; 
+        }
+
         SetGhostVisibility(false);
         SetRandomPatrolPoint();
     }
@@ -293,7 +320,7 @@ public class Ghost : MonoBehaviour
         while (isHunting)
         {
             SetGhostVisibility(!ghostRenderers[0].enabled);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.3f);
         }
 
         SetGhostVisibility(false);
