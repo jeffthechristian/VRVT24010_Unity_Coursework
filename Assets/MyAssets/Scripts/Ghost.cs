@@ -15,6 +15,9 @@ public class Ghost : MonoBehaviour
     public AudioClip huntSound;
     public AudioClip idleSound;
     public AudioClip[] randomSounds;
+    public GameObject outsideDoor;
+    public GameObject outsideDoorHandle;
+
 
     [SerializeField] private SkinnedMeshRenderer[] ghostRenderers;
     private NavMeshAgent navMeshAgent;
@@ -211,6 +214,8 @@ public class Ghost : MonoBehaviour
 
     void HuntPlayer()
     {
+        outsideDoorHandle.SetActive(false);
+        outsideDoor.transform.rotation = Quaternion.Euler(0, 0, 0); 
         navMeshAgent.SetDestination(player.position);
     }
 
@@ -224,6 +229,7 @@ public class Ghost : MonoBehaviour
             StopCoroutine(huntCoroutine);
         }
 
+        outsideDoorHandle.SetActive(true);
         SetGhostVisibility(false);
         SetRandomPatrolPoint();
     }
