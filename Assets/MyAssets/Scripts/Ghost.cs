@@ -3,8 +3,10 @@ using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.Audio;
 
-public class GhostEnemy : MonoBehaviour
+public class Ghost : MonoBehaviour
 {
+    public static int ghostAnger = 0;
+    private static int currentGhostAnger;
     public float moveSpeed = 2f;
     public float patrolRadius = 20f;
     public float reachDistance = 1f;
@@ -32,6 +34,7 @@ public class GhostEnemy : MonoBehaviour
 
     void Start()
     {
+        currentGhostAnger = ghostAnger;
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = moveSpeed;
@@ -47,6 +50,13 @@ public class GhostEnemy : MonoBehaviour
 
     void Update()
     {
+        if (currentGhostAnger < ghostAnger)
+        {
+            currentGhostAnger = ghostAnger;
+
+            huntChance += 0.75f;
+        }
+
         if (isHunting)
         {
             if (player != null && IsPlayerReachable())
