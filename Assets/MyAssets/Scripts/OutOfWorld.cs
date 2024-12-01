@@ -10,6 +10,7 @@ public class OutOfWorld : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.transform.position = respawnPosition;
+            return;
         } 
         else
         {
