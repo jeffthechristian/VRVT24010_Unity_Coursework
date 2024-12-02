@@ -64,6 +64,7 @@ public class Cross : MonoBehaviour
         if (other.CompareTag("Fire"))
         {
             fire.SetActive(true);
+            victory.SetActive(true);
         }
     }
 
