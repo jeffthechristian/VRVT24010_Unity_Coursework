@@ -196,12 +196,6 @@ public class Ghost : MonoBehaviour
             grabInteractable.enabled = false; 
         }
 
-        Rigidbody rb = outsideDoor.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = true; 
-        }
-
         outsideDoor.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         yield return new WaitForSeconds(7f);
@@ -261,12 +255,6 @@ public class Ghost : MonoBehaviour
         if (grabInteractable != null)
         {
             grabInteractable.enabled = true;
-        }
-
-        Rigidbody rb = outsideDoor.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = false;
         }
 
         HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();

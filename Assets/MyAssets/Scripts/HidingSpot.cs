@@ -11,7 +11,7 @@ public class HidingSpot : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("GhostTarget"))
+        if (other.CompareTag("PTrigger"))
         {
             player.SetActive(false);
             audioSource.PlayOneShot(audioClip);
@@ -20,9 +20,10 @@ public class HidingSpot : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("GhostTarget"))
+        if (other.CompareTag("PTrigger"))
         {
             player.SetActive(true);
+
         }
     }
 }
