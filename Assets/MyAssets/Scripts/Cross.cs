@@ -14,6 +14,9 @@ public class Cross : MonoBehaviour
     public GameObject candle;
 
     public GameObject fire;
+    public GameObject victory;
+    public AudioSource audiosource;
+    public AudioClip sound2;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -53,6 +56,8 @@ public class Cross : MonoBehaviour
                 if (cabinetDoor1 != null) cabinetDoor1.SetActive(false);
                 if (cabinetDoor2 != null) cabinetDoor2.SetActive(true);
                 if (candle != null) candle.SetActive(true);
+
+                audiosource.PlayOneShot(sound2);
             }
         }
 

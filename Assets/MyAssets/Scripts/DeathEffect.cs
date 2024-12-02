@@ -10,6 +10,8 @@ public class DeathEffect : MonoBehaviour
     public TMP_Text deathText; 
     public AudioSource deathSound; 
 
+    public float fadeDuration = 4f;
+
     public void Start()
     {
         StartCoroutine(FadeToBlack());
@@ -18,7 +20,7 @@ public class DeathEffect : MonoBehaviour
     private IEnumerator FadeToBlack()
     {
         float elapsedTime = 0f;
-        float fadeDuration = 4f;
+        fadeDuration = 4f;
         Color color = blackScreen.color;
 
         if (deathSound != null)
