@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Flashlight : MonoBehaviour
 {
     [SerializeField] private GameObject flashlight;
-
+    public static bool isFlashlight = true;
     public InputActionReference toggleFlashlightAction;
 
     private void OnEnable()
@@ -23,6 +23,7 @@ public class Flashlight : MonoBehaviour
 
     private void ToggleTabletActionPerformed(InputAction.CallbackContext context)
     {
-        flashlight.SetActive(!flashlight.activeSelf);
+        isFlashlight = !isFlashlight;
+        flashlight.SetActive(isFlashlight);
     }
 }

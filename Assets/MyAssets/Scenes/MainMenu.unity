@@ -1013,8 +1013,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "I was too lazy to create a proper tutorial so you'll have to read. \n\nFlashlight
-    - X\nTablet - Y\nPick and hold - Grip\nPress - Trigger\n\nEverything else will
-    be explained while playing\n(make sure your sound  is on)\n"
+    - X\nCrouch - B\nTablet - Y\nPick and hold - Grip\nPress - Trigger\n\nWhen you
+    enter a hiding spot you will hear say\n\"I can hide here\"\nWhen hiding make
+    sure you are crouching \nand flashlight is off\n\nEverything else will be explained
+    while playing\n(make sure your sound  is on)\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1322,8 +1324,41 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 712573877}
   m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+--- !u!1 &712573876 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 712573875}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &712573877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712573876}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d492344ae00a6f41809ec827da718a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xrOrigin: {fileID: 712573879}
+  toggleCrouchlightAction: {fileID: 3934490184981993311, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+--- !u!114 &712573879 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1178791450436251564, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 712573875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712573876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &791688165
 GameObject:
   m_ObjectHideFlags: 0
