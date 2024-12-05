@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Flashlight : MonoBehaviour
 {
     [SerializeField] private GameObject flashlight;
-    public static bool isFlashlight = true;
+    public static bool isFlashlight = false;
     public InputActionReference toggleFlashlightAction;
 
     private void OnEnable()

@@ -6,11 +6,10 @@ using UnityEngine.Audio;
 
 public class HidingSpot : MonoBehaviour
 {
-    public GameObject player;
     public AudioClip audioClip;
     public AudioSource audioSource;
 
-    private bool isPlayerHiding = false;
+    public static bool isPlayerHiding = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,15 +31,5 @@ public class HidingSpot : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (isPlayerHiding && XROrigin.isCrouching && !Flashlight.isFlashlight)
-        {
-            player.SetActive(false);
-        }
-        else
-        {
-            player.SetActive(true);
-        }
-    }
+
 }
