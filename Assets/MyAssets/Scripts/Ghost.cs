@@ -183,10 +183,6 @@ public class Ghost : MonoBehaviour
         HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
         if (hingeJoint != null)
         {
-            JointSpring jointSpring = hingeJoint.spring;
-            jointSpring.targetPosition = 0; 
-            hingeJoint.spring = jointSpring;
-            hingeJoint.useSpring = true; 
             hingeJoint.useLimits = false; 
         }
 
@@ -266,13 +262,12 @@ public class Ghost : MonoBehaviour
         Rigidbody rb = outsideDoor.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.isKinematic = true;
+            rb.isKinematic = false;
         }
 
         HingeJoint hingeJoint = outsideDoor.GetComponent<HingeJoint>();
         if (hingeJoint != null)
         {
-            hingeJoint.useSpring = false; 
             hingeJoint.useLimits = true; 
         }
 

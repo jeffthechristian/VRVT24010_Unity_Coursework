@@ -34,16 +34,13 @@ public class HidingSpot : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerHiding)
+        if (isPlayerHiding && XROrigin.isCrouching && !Flashlight.isFlashlight)
         {
-            if (XROrigin.isCrouching && !Flashlight.isFlashlight && isPlayerHiding)
-            {
-                player.SetActive(false);
-            }
-            else
-            {
-                player.SetActive(true);
-            }
+            player.SetActive(false);
+        }
+        else
+        {
+            player.SetActive(true);
         }
     }
 }
