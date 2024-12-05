@@ -36,7 +36,7 @@ public class HidingSpot : MonoBehaviour
     {
         if (isPlayerHiding)
         {
-            if (XROrigin.isCrouching && Flashlight.isFlashlight && isPlayerHiding)
+            if (XROrigin.isCrouching && !Flashlight.isFlashlight && isPlayerHiding)
             {
                 player.SetActive(false);
             }
