@@ -18,11 +18,9 @@ public class HidingSpot : MonoBehaviour
         {
             audioSource.PlayOneShot(audioClip);
 
-            if (!XROrigin.isCrouching && !Flashlight.isFlashlight)
-            {
-                player.SetActive(false);
-                isPlayerHiding = true;
-            }
+
+            isPlayerHiding = true;
+
         }
     }
 
@@ -30,7 +28,6 @@ public class HidingSpot : MonoBehaviour
     {
         if (other.CompareTag("PTrigger"))
         {
-            player.SetActive(true);
             isPlayerHiding = false;
         }
     }
@@ -39,10 +36,13 @@ public class HidingSpot : MonoBehaviour
     {
         if (isPlayerHiding)
         {
-            if (XROrigin.isCrouching || Flashlight.isFlashlight)
+            if (XROrigin.isCrouching && Flashlight.isFlashlight && isPlayerHiding)
+            {
+                player.SetActive(false);
+            }
+            else
             {
                 player.SetActive(true);
-                isPlayerHiding = false;
             }
         }
     }
